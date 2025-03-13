@@ -233,7 +233,7 @@ useEffect(()=>{
                     
           <img src={Pics} alt="User profile" className="bg-amber-50 h-[26px] w-[26px] rounded-[50%]" />
           <div>
-            <p className="text-[18px] font-bold text-white">{user?.name}</p>
+            <p className="text-[20px] font-bold text-white">{user?.name}</p>
             {/* <p className="text-[12px] text-gray-400">{user?.latestMessage || "No messages yet"}</p> */}
           </div>
         </div>

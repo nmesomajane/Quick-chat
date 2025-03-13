@@ -24,7 +24,7 @@ const Message: React.FC<MessageProps> = ({ message }) => {
     >
       {/* Profile Picture & Timestamp */}
       <div className="flex flex-col items-center">
-        <img
+        {/* <img
           src={
             message.senderId === currentUser?.uid
               ? currentUser?.photoURL ?? ""
@@ -32,8 +32,8 @@ const Message: React.FC<MessageProps> = ({ message }) => {
           }
           alt=""
           className="w-[40px] h-[40px] rounded-full object-cover"
-        />
-        <p className="text-gray-400 text-sm">
+        /> */}
+        <p className="text-gray-400 text-sm bottom-0">
           {new Date(message.date?.toDate()).toLocaleTimeString()}
         </p>
       </div>
@@ -41,10 +41,10 @@ const Message: React.FC<MessageProps> = ({ message }) => {
       {/* Message Bubble */}
       <div className="flex max-w-[80%]">
         <p
-          className={`px-3 py-2 text-sm ${
+          className={`px-3 py-2 text-[16px] ${
             message.senderId === currentUser?.uid
               ? "bg-blue-900 text-white"
-              : "bg-blue-500 text-black"
+              : "bg-blue-950 text-white"
           }`}
           style={{
             borderRadius:
@@ -54,6 +54,7 @@ const Message: React.FC<MessageProps> = ({ message }) => {
           }}
         >
           {message.text}
+          
         </p>
       </div>
     </div>
