@@ -29,9 +29,6 @@ const Input = () => {
   }
   try {
   if (text.trim() === "" && !img) return; // Prevent sending empty messages
-
-  
-
   
 
   console.log("Message to send:", text); // Debugging
@@ -67,6 +64,7 @@ const Input = () => {
             image: imageUrl, // Include image URL if uploaded
           }),
         });
+        
       }
     );
   } else {
@@ -80,6 +78,10 @@ const Input = () => {
         date: Timestamp.now(),
       }),
     });
+
+    // ✅ Clear the input after successfully sending the message
+          setText("");
+          setImg(null);
   }
 
   // Update last message in userChats
@@ -102,40 +104,33 @@ const Input = () => {
     [user?.chatId + ".lastMessage"]: { text },
     [user?.chatId + ".date"]: serverTimestamp(),
   });
-
+    
    console.log("Message successfully stored in Firestore!");
   } catch (error) {
     console.error("Error storing message:", error);
   }
 
-  setText("");
-  setImg(null);
+  
 };
 
 
- const handleKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleSend();
-      console.log('Sending message:', text);
-    }
-  };
-
+ 
   return (
-    <div className='h-[60px] bg-white p-[12px] absolute bottom-0 w-full '>
+    <div className='h-[60px] bg-white p-[12px] absolute  bottom-0 w-full '>
       <div className='flex items-center justify-between' >
-      <input type="text" placeholder='Enter Message ' onChange={e=>setText(e.target.value)} value={text}/>
-      <div  className='flex items-center justify-between gap-3' >
-        <FaPaperclip />
+      <input type="text" placeholder='Enter Message ' onChange={e=>setText(e.target.value)}   onKeyDown={(e) => e.key === "Enter" && handleSend()} value={text}/>
+      <div  className='flex items-center justify-between gap-3 outline-none border-none focus:ring-0' >
+        <FaPaperclip className='text-#B3E5FC text-xl  ' />
         
-        <input type="file" id='file' className='hidden bg-#FAFAFA' onChange={e => {
+        <input type="file" id='file' className='hidden bg-#FAFAFA ' onChange={e => {
           if (e.target.files) {
             setImg(e.target.files[0]);
           }
         }}/>
         <label htmlFor="file">
-          <FaImage className='' />
+          <FaImage className='text-#B3E5FC text-xl' />
         </label>
-        <button className='shadow-lg bg-#64B5F6 p-1' onClick={handleSend} onKeyDown={(e) => e.key === 'Enter' && handleSend()}>Send</button>
+        <button className='shadow-lg bg-#64B5F6 p-1' onClick={handleSend} >Send</button>
         </div>
       </div>
     </div>

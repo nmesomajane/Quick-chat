@@ -47,6 +47,7 @@ const Search = () => {
         return prevUsers;
       });
     });
+    setUsername(''); // Clear the input field
   } catch (err) {
     console.error("Error searching user:", err);
     setError(true);
@@ -78,6 +79,10 @@ useEffect(()=>{
  // defines handleselect
   const handleSelect = async (user: { uid: string; name?: string; displayName?: string; photoURL?: string }) => {
     console.log("Selected user:", user);
+
+    console.log("User object:", user);
+    console.log("User name before formatting:", user?.name);
+
     setSelectedUser({ ...user, email: '', name: user.name || '' }); // Ensure name is always a string
 
     if (!currentUser) {
@@ -124,61 +129,61 @@ useEffect(()=>{
 
         await updateDoc(doc(db, 'userChats', currentUser.uid), userChatData);
  
-      useEffect(() => {
-  if (!currentUser || !user) return; // Ensure both users exist
 
-  const combinedId =
-    currentUser.uid > user.uid ? currentUser.uid + user.uid : user.uid + currentUser.uid;
+//  last message in userChats
+//       useEffect(() => {
+//   if (!currentUser || !user) return; // Ensure both users exist
 
-  // Listen for changes in the chat document
-  const unsubscribe = onSnapshot(doc(db, "chats", combinedId), (docSnap) => {
-    if (docSnap.exists()) {
-      const messages = docSnap.data().messages || [];
-      const latestMessage = messages.length > 0 ? messages[messages.length - 1].text : "No messages yet";
-        if (dispatch) { // ✅ Prevents errors
-        dispatch({
-          type: "UPDATE_LATEST_MESSAGE",
-          payload: { chatId, latestMessage },
-        });
-      } else {
-        console.warn("Dispatch function is undefined.");
-      }
-      if (dispatch) {
-        dispatch({
-          type: "UPDATE_LATEST_MESSAGE",
-          payload: { userId: user.uid, latestMessage },
-        });
-      }
-    }
-  });
+//   const combinedId =
+//     currentUser.uid > user.uid ? currentUser.uid + user.uid : user.uid + currentUser.uid;
 
-  return () => unsubscribe(); // Cleanup function to prevent memory leaks
-}, [user, currentUser]); // Runs when user or currentUser changes
+//   // Listen for changes in the chat document
+//   const unsubscribe = onSnapshot(doc(db, "chats", combinedId), (docSnap) => {
+//     if (docSnap.exists()) {
+//       const messages = docSnap.data().messages || [];
+//       const latestMessage = messages.length > 0 ? messages[messages.length - 1].text : "No messages yet";
+//         if (dispatch) { // ✅ Prevents errors
+//         dispatch({
+//           type: "UPDATE_LATEST_MESSAGE",
+//           payload: { chatId, latestMessage },
+//         });
+//       } else {
+//         console.warn("Dispatch function is undefined.");
+//       }
+//       if (dispatch) {
+//         dispatch({
+//           type: "UPDATE_LATEST_MESSAGE",
+//           payload: { userId: user.uid, latestMessage },
+//         });
+//       }
+//     }
+//   });
 
+//   return () => unsubscribe(); // Cleanup function to prevent memory leaks
+// }, [user, currentUser]); // Runs when user or currentUser changes
 
+  //       try {
+  //   const chatDoc = await getDoc(doc(db, "chats", combinedId));
 
-        try {
-    const chatDoc = await getDoc(doc(db, "chats", combinedId));
+  //   let latestMessage = "No messages yet"; // Default message if none exist
+  // console.log(chatDoc.exists(), chatDoc.exists() ? chatDoc.data().messages : "" )
+  //   if (chatDoc.exists() && chatDoc.data().messages.length > 0) {
+  //     const messages = chatDoc.data().messages;
+  //     console.log("Messages:", messages);
+  //     latestMessage = messages[messages.length - 1]?.text || "No messages yet";
+  //   }
 
-    let latestMessage = "No messages yet"; // Default message if none exist
-  console.log(chatDoc.exists(), chatDoc.exists() ? chatDoc.data().messages : "" )
-    if (chatDoc.exists() && chatDoc.data().messages.length > 0) {
-      const messages = chatDoc.data().messages;
-      console.log("Messages:", messages);
-      latestMessage = messages[messages.length - 1]?.text || "No messages yet";
-    }
+  //   if (dispatch) {
+  //     dispatch({
+  //       type: "CHANGE_USER",
+  //       payload: { ...selectedUser, latestMessage },
+  //     });
+  //   }
 
-    if (dispatch) {
-      dispatch({
-        type: "CHANGE_USER",
-        payload: { ...selectedUser, latestMessage },
-      });
-    }
-
-    console.log("🔄 Updated user with latest message:", latestMessage);
-  } catch (err) {
-    console.error("🚨 Error fetching latest message:", err);
-  }
+  //   console.log("🔄 Updated user with latest message:", latestMessage);
+  // } catch (err) {
+  //   console.error("🚨 Error fetching latest message:", err);
+  // }
 
         const currentUserChatData = {
           [combinedId + "userInfo"]: {
@@ -197,6 +202,14 @@ useEffect(()=>{
       console.error('Error creating/updating chat:', err); // More specific error message
     }
   };
+  // ✅ Format the display name to start with a capital letter 
+  //  const formattedName = user?.name
+  //   ? user?.name.charAt(0).toUpperCase() + user?.name.slice(1).toLowerCase()
+  //   : "";
+  //   console.log("formattedName", formattedName)
+  
+ 
+
   
 
   return (
@@ -205,7 +218,7 @@ useEffect(()=>{
         <input
           type="text"
           placeholder="Search"
-          className="rounded-xl bg-blue-700 text-white shadow-lg p-1 w-[90%] flex items-center m-2"
+          className="  mx-2 my-3 rounded-xl outline-none border-none focus:ring-0 text-white shadow-lg p-1 w-[100%] flex items-center "
           onKeyDown={handleKey}
           onChange={(e) => setUsername(e.target.value)}
         />
@@ -215,13 +228,13 @@ useEffect(()=>{
       
       {searchedUsers.map((user)=> (
        <div
-          className="flex items-center p-2 text-white gap-1 cursor-pointer hover:bg-blue-700 border-b-1"
+          className="flex items-center p-4 text-white gap-1 cursor-pointer hover:bg-blue-900 text-[18px] "
           onClick={()=>handleSelect(user)}>  
                     
           <img src={Pics} alt="User profile" className="bg-amber-50 h-[26px] w-[26px] rounded-[50%]" />
           <div>
-            <p className="text-[18px] font-bold">{user?.name}</p>
-            <p className="text-[12px] text-gray-400">{user?.latestMessage || "No messages yet"}</p>
+            <p className="text-[18px] font-bold text-white">{user?.name}</p>
+            {/* <p className="text-[12px] text-gray-400">{user?.latestMessage || "No messages yet"}</p> */}
           </div>
         </div>
       )

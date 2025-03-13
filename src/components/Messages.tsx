@@ -65,8 +65,8 @@ const Messages = () => {
   }, [chatId]);
 
   return (
-    <div>
-    <div className=' h-[calc(100vh-150px)]overflow-y-auto ' >
+    <div className='flex flex-col justify-between h-full'>
+    <div className='flex-1 flex-col h-[calc(100vh-150px)]overflow-y-auto ' >
        {Messages.map((message) => (
         <Message key={message.id} message={message}/>
       )

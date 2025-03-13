@@ -62,6 +62,8 @@ const Login = () => {
                   onChange={(e)=> setPassword
                   (e.target.value)}
                 className='rounded-l  bg-white shadow-sm p-2'/>
+
+                <p><Link to="/" style={{ color: "blue", textDecoration: "underline", marginLeft: "5px" }}>Forget password</Link></p>
                 
                 <button className='shadow-sm bg-blue-400 rounded p-2 cursor-pointer text-white text-xl' disabled={!isFormValid} >Login</button>
             </form>

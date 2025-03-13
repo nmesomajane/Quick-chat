@@ -7,8 +7,6 @@ import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom'
 
 import { Link  } from "react-router-dom";
- import { getStorage, ref, uploadBytesResumable, getDownloadURL }
- from "firebase/storage";
 import { doc, setDoc, getDoc } from "firebase/firestore"; 
 
 const Signup = () => {
@@ -153,8 +151,10 @@ ensureUserChatExists();
                 value={password} 
                 onChange={(e)=> 
                 setPassword (e.target.value)}  placeholder='password'className='rounded-l  bg-white shadow-sm p-2'/>
-                <input type="file" 
-                className='rounded '/>
+                {/* <input type="file" 
+                className='rounded '/> */}
+
+                
 
                 <button className='shadow-sm bg-blue-400 rounded p-2 cursor-pointer text-white text-xl'  disabled={!isFormValid}>Sign Up</button>
                 
